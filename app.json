@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "XRP Wallet",
-    "slug": "XRP Wallet",
+    "name": "XRP Wallet1",
+    "slug": "XRP Wallet1",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/natively-dark.png",
@@ -27,7 +27,7 @@
         "backgroundColor": "#6200EE"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.bokizg.xrpwallet",
+      "package": "com.walletx.app",
       "permissions": [
         "android.permission.CAMERA"
       ]
@@ -48,8 +48,7 @@
       "expo-font",
       "expo-router",
       "expo-web-browser",
-      "expo-camera",
-      "expo-barcode-scanner"
+      "expo-camera"
     ],
     "scheme": "xrp-wallet",
     "experiments": {
@@ -59,5 +58,5 @@
       "router": {}
     }
   },
-  "scheme": "XRP Wallet"
+  "scheme": "XRP Wallet1"
 }

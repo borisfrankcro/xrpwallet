@@ -9,7 +9,7 @@ import {
   Alert,
   Platform,
 } from 'react-native';
-import { BarCodeScanner } from 'expo-barcode-scanner';
+import { CameraView, Camera } from 'expo-camera';
 import { IconSymbol } from '@/components/IconSymbol';
 import { useAppTheme } from '@/contexts/ThemeContext';
 import { commonStyles } from '@/styles/commonStyles';
@@ -26,17 +26,20 @@ export default function QRScanner({ visible, onClose, onScan }: QRScannerProps) 
   const [scanned, setScanned] = useState(false);
 
   useEffect(() => {
-    const getBarCodeScannerPermissions = async () => {
-      const { status } = await BarCodeScanner.requestPermissionsAsync();
+    const getCameraPermissions = async () => {
+      const { status } = await Camera.requestCameraPermissionsAsync();
       setHasPermission(status === 'granted');
     };
 
     if (visible) {
-      getBarCodeScannerPermissions();
+      getCameraPermissions();
+      setScanned(false);
     }
   }, [visible]);
 
   const handleBarCodeScanned = ({ type, data }: { type: string; data: string }) => {
+    if (scanned) return;
+    
     setScanned(true);
     console.log('QR Code scanned:', data);
     onScan(data);
@@ -69,7 +72,7 @@ export default function QRScanner({ visible, onClose, onScan }: QRScannerProps) 
     closeButton: {
       padding: 5,
     },
-    scanner: {
+    camera: {
       flex: 1,
     },
     overlay: {
@@ -199,7 +202,7 @@ export default function QRScanner({ visible, onClose, onScan }: QRScannerProps) 
             </Text>
             <TouchableOpacity
               style={styles.permissionButton}
-              onPress={() => BarCodeScanner.requestPermissionsAsync()}
+              onPress={() => Camera.requestCameraPermissionsAsync()}
             >
               <Text style={styles.permissionButtonText}>Grant Permission</Text>
             </TouchableOpacity>
@@ -219,9 +222,13 @@ export default function QRScanner({ visible, onClose, onScan }: QRScannerProps) 
           </TouchableOpacity>
         </View>
         
-        <BarCodeScanner
-          onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-          style={styles.scanner}
+        <CameraView
+          style={styles.camera}
+          facing="back"
+          onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
+          barcodeScannerSettings={{
+            barcodeTypes: ["qr", "pdf417"],
+          }}
         />
         
         <View style={styles.overlay}>
