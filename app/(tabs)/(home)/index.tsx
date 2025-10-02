@@ -9,16 +9,26 @@ import { useAppTheme } from "@/contexts/ThemeContext";
 import { commonStyles } from "@/styles/commonStyles";
 import WalletCreator from "@/components/WalletCreator";
 import BalanceChecker from "@/components/BalanceChecker";
-
+import QRScanner from "@/components/QRScanner";
 import OnboardingModal from "@/components/OnboardingModal";
 import XRPPriceDisplay from "@/components/XRPPriceDisplay";
-import XRPLogo from "@/components/XRPLogo";
 
 export default function HomeScreen() {
   const theme = useTheme();
   const { colors, isDark, toggleTheme } = useAppTheme();
   const [activeTab, setActiveTab] = useState<'create' | 'balance'>('create');
+  const [showQRScanner, setShowQRScanner] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(true);
+
+  const handleQRScan = (data: string) => {
+    console.log('QR scanned:', data);
+    // If we're on the balance tab, set the scanned address
+    if (activeTab === 'balance') {
+      // This would need to be passed to BalanceChecker component
+      // For now, we'll just show an alert
+      alert(`Scanned address: ${data}`);
+    }
+  };
 
   const renderHeaderRight = () => (
     <Pressable
@@ -35,17 +45,12 @@ export default function HomeScreen() {
 
   const renderHeaderLeft = () => (
     <View style={styles.brandContainer}>
-      <View style={styles.brandHeader}>
-        <XRPLogo size={32} color={colors.currentPrimary} variant="gradient" />
-        <View style={styles.brandTextContainer}>
-          <Text style={[styles.brandText, { color: colors.currentText }]}>
-            XRP WALLET
-          </Text>
-          <Text style={[styles.brandSubtext, { color: colors.currentTextSecondary }]}>
-            made by Boki zg
-          </Text>
-        </View>
-      </View>
+      <Text style={[styles.brandText, { color: colors.currentText }]}>
+        XRP WALLET
+      </Text>
+      <Text style={[styles.brandSubtext, { color: colors.currentTextSecondary }]}>
+        made by Boki zg
+      </Text>
     </View>
   );
 
@@ -73,22 +78,6 @@ export default function HomeScreen() {
         )}
         
         <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
-          {/* Hero Section with XRP Branding */}
-          <View style={[styles.heroSection, { backgroundColor: colors.currentCard }]}>
-            <View style={styles.heroContent}>
-              <XRPLogo size={80} color={colors.currentPrimary} variant="gradient" />
-              <Text style={[styles.heroTitle, { color: colors.currentText }]}>
-                XRP WALLET
-              </Text>
-              <Text style={[styles.heroSubtitle, { color: colors.currentTextSecondary }]}>
-                Secure • Professional • Easy to Use
-              </Text>
-              <Text style={[styles.heroDescription, { color: colors.currentTextSecondary }]}>
-                Create and manage XRP wallets on the XRPL network with confidence
-              </Text>
-            </View>
-          </View>
-
           {/* XRP Price Display */}
           <XRPPriceDisplay />
           
@@ -101,10 +90,10 @@ export default function HomeScreen() {
               ]}
               onPress={() => setActiveTab('create')}
             >
-              <XRPLogo 
+              <IconSymbol 
+                name="plus.circle.fill" 
                 size={20} 
-                color={activeTab === 'create' ? colors.currentCard : colors.currentPrimary} 
-                variant="outline"
+                color={activeTab === 'create' ? colors.currentCard : colors.currentText} 
               />
               <Text style={[
                 styles.tabText,
@@ -145,6 +134,13 @@ export default function HomeScreen() {
           </View>
         </ScrollView>
 
+        {/* QR Scanner Modal */}
+        <QRScanner
+          visible={showQRScanner}
+          onClose={() => setShowQRScanner(false)}
+          onScan={handleQRScan}
+        />
+
         {/* Onboarding Modal */}
         <OnboardingModal
           visible={showOnboarding}
@@ -173,61 +169,16 @@ const styles = StyleSheet.create({
   brandContainer: {
     flex: 1,
   },
-  brandHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-  },
-  brandTextContainer: {
-    flex: 1,
-  },
   brandText: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
-    letterSpacing: 0.5,
   },
   brandSubtext: {
-    fontSize: 11,
+    fontSize: 12,
     fontStyle: 'italic',
-    opacity: 0.8,
   },
   headerButtonContainer: {
     padding: 8,
-  },
-  heroSection: {
-    margin: 16,
-    borderRadius: 16,
-    padding: 24,
-    alignItems: 'center',
-    elevation: 4,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 8,
-  },
-  heroContent: {
-    alignItems: 'center',
-    gap: 8,
-  },
-  heroTitle: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    letterSpacing: 1,
-    marginTop: 12,
-  },
-  heroSubtitle: {
-    fontSize: 14,
-    fontWeight: '600',
-    textAlign: 'center',
-    opacity: 0.9,
-  },
-  heroDescription: {
-    fontSize: 13,
-    textAlign: 'center',
-    lineHeight: 18,
-    marginTop: 4,
-    opacity: 0.7,
-    maxWidth: 280,
   },
   tabContainer: {
     flexDirection: 'row',

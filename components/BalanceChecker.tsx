@@ -190,20 +190,6 @@ export default function BalanceChecker() {
       color: colors.currentText,
       marginTop: 10,
     },
-    infoBanner: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      padding: 12,
-      marginHorizontal: 20,
-      marginBottom: 10,
-      borderRadius: 8,
-      gap: 8,
-    },
-    infoBannerText: {
-      flex: 1,
-      fontSize: 12,
-      fontWeight: '500',
-    },
   });
 
   return (
@@ -219,14 +205,6 @@ export default function BalanceChecker() {
               Check XRP account balance and status
             </Text>
           </View>
-        </View>
-
-        {/* Info Banner */}
-        <View style={[styles.infoBanner, { backgroundColor: colors.currentSecondary }]}>
-          <IconSymbol name="info.circle.fill" size={20} color={colors.currentCard} />
-          <Text style={[styles.infoBannerText, { color: colors.currentCard }]}>
-            QR scanning temporarily unavailable. Use manual input or sample addresses.
-          </Text>
         </View>
 
         {/* Input Section */}
@@ -250,7 +228,7 @@ export default function BalanceChecker() {
               style={styles.qrButton}
               onPress={() => setShowQRScanner(true)}
             >
-              <IconSymbol name="plus.circle.fill" size={24} color={colors.currentCard} />
+              <IconSymbol name="qrcode.viewfinder" size={24} color={colors.currentCard} />
             </TouchableOpacity>
           </View>
 

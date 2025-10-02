@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "xrpwallet",
-    "slug": "xrpwallet",
+    "name": "XRP Wallet",
+    "slug": "XRP Wallet",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/natively-dark.png",
@@ -17,7 +17,8 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.bokizg.xrpwallet",
       "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
+        "ITSAppUsesNonExemptEncryption": false,
+        "NSCameraUsageDescription": "This app uses the camera to scan QR codes for XRP addresses."
       }
     },
     "android": {
@@ -26,8 +27,10 @@
         "backgroundColor": "#6200EE"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.XRPWALLET.app",
-      "permissions": []
+      "package": "com.bokizg.xrpwallet",
+      "permissions": [
+        "android.permission.CAMERA"
+      ]
     },
     "web": {
       "favicon": "./assets/images/final_quest_240x240.png",
@@ -44,7 +47,9 @@
     "plugins": [
       "expo-font",
       "expo-router",
-      "expo-web-browser"
+      "expo-web-browser",
+      "expo-camera",
+      "expo-barcode-scanner"
     ],
     "scheme": "xrp-wallet",
     "experiments": {
