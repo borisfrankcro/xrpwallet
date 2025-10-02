@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Natively",
-    "slug": "Natively",
+    "name": "XRP WALLET — made by Boki zg",
+    "slug": "xrp-wallet-boki-zg",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/natively-dark.png",
@@ -10,33 +10,48 @@
     "splash": {
       "image": "./assets/images/natively-dark.png",
       "resizeMode": "contain",
-      "backgroundColor": "#000000"
+      "backgroundColor": "#6200EE"
     },
+    "description": "Professional XRP wallet for XRPL network. Create wallets, check balances, and manage XRP securely.",
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.Natively",
+      "bundleIdentifier": "com.bokizg.xrpwallet",
       "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
+        "ITSAppUsesNonExemptEncryption": false,
+        "NSCameraUsageDescription": "This app uses the camera to scan QR codes for XRP addresses."
       }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/natively-dark.png",
-        "backgroundColor": "#000000"
+        "backgroundColor": "#6200EE"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.anonymous.Natively"
+      "package": "com.bokizg.xrpwallet",
+      "permissions": [
+        "android.permission.CAMERA"
+      ]
     },
     "web": {
       "favicon": "./assets/images/final_quest_240x240.png",
-      "bundler": "metro"
+      "bundler": "metro",
+      "name": "XRP WALLET",
+      "shortName": "XRP Wallet",
+      "description": "Professional XRP wallet for XRPL network",
+      "startUrl": "/",
+      "display": "standalone",
+      "orientation": "portrait",
+      "themeColor": "#6200EE",
+      "backgroundColor": "#f9f9f9"
     },
     "plugins": [
       "expo-font",
       "expo-router",
-      "expo-web-browser"
+      "expo-web-browser",
+      "expo-camera",
+      "expo-barcode-scanner"
     ],
-    "scheme": "natively",
+    "scheme": "xrp-wallet",
     "experiments": {
       "typedRoutes": true
     },
