@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "XRP WALLET — made by Boki zg",
-    "slug": "xrp-wallet-boki-zg",
+    "name": "XRP Wallet",
+    "slug": "XRP Wallet",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/natively-dark.png",
@@ -58,5 +58,6 @@
     "extra": {
       "router": {}
     }
-  }
+  },
+  "scheme": "XRP Wallet"
 }

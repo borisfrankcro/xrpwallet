@@ -17,6 +17,7 @@ import { useAppTheme } from '@/contexts/ThemeContext';
 import { commonStyles } from '@/styles/commonStyles';
 import { XRPWallet, xrplService, AccountInfo } from '@/utils/xrplUtils';
 import BrandFooter from '@/components/BrandFooter';
+import XRPLogo from '@/components/XRPLogo';
 
 interface WalletCreatorProps {
   onWalletCreated?: (wallet: XRPWallet) => void;
@@ -83,10 +84,20 @@ export default function WalletCreator({ onWalletCreated }: WalletCreatorProps) {
     content: {
       padding: 20,
     },
+    headerContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginBottom: 20,
+      gap: 12,
+    },
     createButton: {
       backgroundColor: colors.currentPrimary,
       ...commonStyles.button,
       marginVertical: 20,
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 8,
     },
     createButtonText: {
       color: colors.currentCard,
@@ -108,6 +119,15 @@ export default function WalletCreator({ onWalletCreated }: WalletCreatorProps) {
       fontSize: 18,
       fontWeight: 'bold',
       color: colors.currentText,
+      marginBottom: 10,
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 8,
+    },
+    sectionTitleContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 8,
       marginBottom: 10,
     },
     addressText: {
@@ -232,12 +252,17 @@ export default function WalletCreator({ onWalletCreated }: WalletCreatorProps) {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.content}>
-        <Text style={[commonStyles.title, { color: colors.currentText }]}>
-          XRP Wallet Creator
-        </Text>
-        <Text style={[commonStyles.subtitle, { color: colors.currentTextSecondary }]}>
-          Generate a new XRP wallet on the XRPL network
-        </Text>
+        <View style={styles.headerContainer}>
+          <XRPLogo size={40} color={colors.currentPrimary} />
+          <View>
+            <Text style={[commonStyles.title, { color: colors.currentText }]}>
+              XRP Wallet Creator
+            </Text>
+            <Text style={[commonStyles.subtitle, { color: colors.currentTextSecondary }]}>
+              Generate a new XRP wallet on the XRPL network
+            </Text>
+          </View>
+        </View>
 
         {!wallet ? (
           <TouchableOpacity
@@ -248,14 +273,20 @@ export default function WalletCreator({ onWalletCreated }: WalletCreatorProps) {
             {isLoading ? (
               <ActivityIndicator color={colors.currentCard} />
             ) : (
-              <Text style={styles.createButtonText}>Create New Wallet</Text>
+              <>
+                <XRPLogo size={24} color={colors.currentCard} />
+                <Text style={styles.createButtonText}>Create New Wallet</Text>
+              </>
             )}
           </TouchableOpacity>
         ) : (
           <View>
             {/* Wallet Address */}
             <View style={styles.walletCard}>
-              <Text style={styles.sectionTitle}>Wallet Address</Text>
+              <View style={styles.sectionTitleContainer}>
+                <IconSymbol name="location.fill" size={20} color={colors.currentPrimary} />
+                <Text style={styles.sectionTitle}>Wallet Address</Text>
+              </View>
               <Text style={styles.addressText}>{wallet.address}</Text>
               <TouchableOpacity
                 style={styles.copyButton}
@@ -267,20 +298,29 @@ export default function WalletCreator({ onWalletCreated }: WalletCreatorProps) {
 
             {/* QR Code */}
             <View style={styles.walletCard}>
-              <Text style={styles.sectionTitle}>QR Code</Text>
+              <View style={styles.sectionTitleContainer}>
+                <IconSymbol name="qrcode" size={20} color={colors.currentPrimary} />
+                <Text style={styles.sectionTitle}>QR Code</Text>
+              </View>
               <View style={styles.qrContainer}>
                 <QRCode
                   value={wallet.address}
                   size={200}
                   backgroundColor={colors.currentCard}
                   color={colors.currentText}
+                  logo={require('@/assets/images/final_quest_240x240.png')}
+                  logoSize={40}
+                  logoBackgroundColor={colors.currentCard}
                 />
               </View>
             </View>
 
             {/* Seed Phrase */}
             <View style={styles.walletCard}>
-              <Text style={styles.sectionTitle}>Seed Phrase</Text>
+              <View style={styles.sectionTitleContainer}>
+                <IconSymbol name="key.fill" size={20} color={colors.currentHighlight} />
+                <Text style={styles.sectionTitle}>Seed Phrase</Text>
+              </View>
               <View style={styles.seedContainer}>
                 {seedRevealed ? (
                   <Text style={styles.seedText}>{wallet.seed}</Text>
@@ -314,7 +354,10 @@ export default function WalletCreator({ onWalletCreated }: WalletCreatorProps) {
 
             {/* Account Status */}
             <View style={styles.walletCard}>
-              <Text style={styles.sectionTitle}>Account Status</Text>
+              <View style={styles.sectionTitleContainer}>
+                <XRPLogo size={20} color={colors.currentPrimary} />
+                <Text style={styles.sectionTitle}>Account Status</Text>
+              </View>
               {isValidating ? (
                 <View style={styles.loadingContainer}>
                   <ActivityIndicator color={colors.currentPrimary} />
@@ -353,6 +396,7 @@ export default function WalletCreator({ onWalletCreated }: WalletCreatorProps) {
               onPress={createWallet}
               disabled={isLoading}
             >
+              <XRPLogo size={24} color={colors.currentCard} />
               <Text style={styles.createButtonText}>Create Another Wallet</Text>
             </TouchableOpacity>
           </View>

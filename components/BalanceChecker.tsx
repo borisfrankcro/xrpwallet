@@ -16,13 +16,13 @@ import { commonStyles } from '@/styles/commonStyles';
 import { xrplService, AccountInfo } from '@/utils/xrplUtils';
 import QRScanner from '@/components/QRScanner';
 import BrandFooter from '@/components/BrandFooter';
+import XRPLogo from '@/components/XRPLogo';
 
 export default function BalanceChecker() {
   const { colors } = useAppTheme();
   const [address, setAddress] = useState('');
   const [accountInfo, setAccountInfo] = useState<AccountInfo | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [showQRScanner, setShowQRScanner] = useState(false);
 
   const checkBalance = async () => {
@@ -38,15 +38,13 @@ export default function BalanceChecker() {
 
     try {
       setIsLoading(true);
-      setError(null);
-      console.log('Checking balance for address:', address.trim());
+      console.log('Checking balance for address:', address);
       
       const info = await xrplService.validateAndGetAccountInfo(address.trim());
       setAccountInfo(info);
       console.log('Balance check completed:', info);
-    } catch (error: any) {
+    } catch (error) {
       console.error('Error checking balance:', error);
-      setError(error.message || 'Failed to check balance');
       Alert.alert('Error', 'Failed to check balance. Please try again.');
     } finally {
       setIsLoading(false);
@@ -56,12 +54,11 @@ export default function BalanceChecker() {
   const clearResults = () => {
     setAddress('');
     setAccountInfo(null);
-    setError(null);
   };
 
   const handleQRScan = (scannedData: string) => {
     console.log('QR scanned in BalanceChecker:', scannedData);
-    setAddress(scannedData.trim());
+    setAddress(scannedData);
     setShowQRScanner(false);
   };
 
@@ -73,14 +70,35 @@ export default function BalanceChecker() {
     content: {
       padding: 20,
     },
-    inputContainer: {
-      marginVertical: 20,
+    headerContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginBottom: 20,
+      gap: 12,
     },
-    label: {
-      fontSize: 16,
-      fontWeight: '600',
+    inputContainer: {
+      backgroundColor: colors.currentCard,
+      borderRadius: 12,
+      padding: 20,
+      marginVertical: 10,
+      elevation: 3,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 4,
+    },
+    sectionTitle: {
+      fontSize: 18,
+      fontWeight: 'bold',
       color: colors.currentText,
-      marginBottom: 8,
+      marginBottom: 15,
+    },
+    sectionTitleContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 8,
+      marginBottom: 15,
     },
     inputRow: {
       flexDirection: 'row',
@@ -89,36 +107,38 @@ export default function BalanceChecker() {
     },
     input: {
       ...commonStyles.input,
-      backgroundColor: colors.currentCard,
+      flex: 1,
+      backgroundColor: colors.currentBackground,
       borderColor: colors.currentTextSecondary,
       color: colors.currentText,
-      fontFamily: 'monospace',
     },
     qrButton: {
-      backgroundColor: colors.currentPrimary,
+      backgroundColor: colors.currentSecondary,
       padding: 12,
       borderRadius: 8,
       alignItems: 'center',
       justifyContent: 'center',
     },
-    buttonContainer: {
-      flexDirection: 'row',
-      gap: 10,
-      marginVertical: 20,
-    },
     checkButton: {
       backgroundColor: colors.currentPrimary,
       ...commonStyles.button,
-      flex: 1,
+      marginTop: 15,
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 8,
+    },
+    checkButtonText: {
+      color: colors.currentCard,
+      fontSize: 16,
+      fontWeight: 'bold',
     },
     clearButton: {
       backgroundColor: colors.currentTextSecondary,
       ...commonStyles.button,
-      flex: 1,
+      marginTop: 10,
     },
-    buttonText: {
+    clearButtonText: {
       color: colors.currentCard,
-      fontSize: 16,
       fontWeight: '600',
     },
     resultCard: {
@@ -132,66 +152,35 @@ export default function BalanceChecker() {
       shadowOpacity: 0.1,
       shadowRadius: 4,
     },
-    resultTitle: {
-      fontSize: 18,
+    resultText: {
+      fontSize: 16,
+      color: colors.currentText,
+      marginVertical: 5,
+    },
+    balanceText: {
+      fontSize: 24,
       fontWeight: 'bold',
-      color: colors.currentText,
-      marginBottom: 15,
-    },
-    infoRow: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      paddingVertical: 8,
-      borderBottomWidth: 1,
-      borderBottomColor: colors.currentBackground,
-    },
-    infoLabel: {
-      fontSize: 14,
-      color: colors.currentTextSecondary,
-      fontWeight: '500',
-    },
-    infoValue: {
-      fontSize: 14,
-      color: colors.currentText,
-      fontWeight: '600',
-      flex: 1,
-      textAlign: 'right',
-      fontFamily: 'monospace',
-    },
-    statusContainer: {
-      backgroundColor: colors.currentBackground,
-      padding: 15,
-      borderRadius: 8,
+      color: colors.currentPrimary,
+      textAlign: 'center',
       marginVertical: 10,
     },
     statusText: {
       fontSize: 16,
-      color: colors.currentText,
       textAlign: 'center',
-      fontWeight: '600',
-    },
-    balanceContainer: {
-      backgroundColor: colors.currentPrimary,
-      padding: 20,
-      borderRadius: 12,
-      alignItems: 'center',
       marginVertical: 10,
     },
-    balanceLabel: {
-      fontSize: 14,
-      color: colors.currentCard,
-      marginBottom: 5,
+    existsText: {
+      color: '#4CAF50',
     },
-    balanceValue: {
-      fontSize: 32,
-      fontWeight: 'bold',
-      color: colors.currentCard,
+    notExistsText: {
+      color: colors.currentHighlight,
     },
-    balanceUnit: {
-      fontSize: 18,
-      color: colors.currentCard,
-      marginTop: 5,
+    addressText: {
+      fontSize: 12,
+      color: colors.currentTextSecondary,
+      fontFamily: 'monospace',
+      textAlign: 'center',
+      marginBottom: 10,
     },
     loadingContainer: {
       alignItems: 'center',
@@ -201,44 +190,36 @@ export default function BalanceChecker() {
       color: colors.currentText,
       marginTop: 10,
     },
-    errorContainer: {
-      backgroundColor: colors.currentHighlight,
-      padding: 15,
-      borderRadius: 8,
-      marginVertical: 10,
-    },
-    errorText: {
-      color: colors.currentCard,
-      textAlign: 'center',
-      fontWeight: '600',
-    },
-    addressText: {
-      fontSize: 12,
-      color: colors.currentTextSecondary,
-      fontFamily: 'monospace',
-      textAlign: 'center',
-      marginBottom: 10,
-    },
   });
 
   return (
     <ScrollView style={styles.container}>
       <View style={styles.content}>
-        <Text style={[commonStyles.title, { color: colors.currentText }]}>
-          Balance Checker
-        </Text>
-        <Text style={[commonStyles.subtitle, { color: colors.currentTextSecondary }]}>
-          Check the balance of any XRP address
-        </Text>
+        <View style={styles.headerContainer}>
+          <XRPLogo size={40} color={colors.currentPrimary} />
+          <View>
+            <Text style={[commonStyles.title, { color: colors.currentText }]}>
+              Balance Checker
+            </Text>
+            <Text style={[commonStyles.subtitle, { color: colors.currentTextSecondary }]}>
+              Check XRP account balance and status
+            </Text>
+          </View>
+        </View>
 
+        {/* Input Section */}
         <View style={styles.inputContainer}>
-          <Text style={styles.label}>XRP Address</Text>
+          <View style={styles.sectionTitleContainer}>
+            <IconSymbol name="magnifyingglass" size={20} color={colors.currentPrimary} />
+            <Text style={styles.sectionTitle}>Enter XRP Address</Text>
+          </View>
+          
           <View style={styles.inputRow}>
             <TextInput
-              style={[styles.input, { flex: 1 }]}
+              style={styles.input}
               value={address}
               onChangeText={setAddress}
-              placeholder="Enter XRP address (e.g., rN7n7otQDd6FczFgLdSqtcsAUxDkw6fzRH)"
+              placeholder="rXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
               placeholderTextColor={colors.currentTextSecondary}
               autoCapitalize="none"
               autoCorrect={false}
@@ -247,12 +228,10 @@ export default function BalanceChecker() {
               style={styles.qrButton}
               onPress={() => setShowQRScanner(true)}
             >
-              <IconSymbol name="qrcode" size={24} color={colors.currentCard} />
+              <IconSymbol name="qrcode.viewfinder" size={24} color={colors.currentCard} />
             </TouchableOpacity>
           </View>
-        </View>
 
-        <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.checkButton}
             onPress={checkBalance}
@@ -261,103 +240,68 @@ export default function BalanceChecker() {
             {isLoading ? (
               <ActivityIndicator color={colors.currentCard} />
             ) : (
-              <Text style={styles.buttonText}>Check Balance</Text>
+              <>
+                <XRPLogo size={20} color={colors.currentCard} />
+                <Text style={styles.checkButtonText}>Check Balance</Text>
+              </>
             )}
-          </TouchableOpacity>
-          
-          <TouchableOpacity
-            style={styles.clearButton}
-            onPress={clearResults}
-            disabled={isLoading}
-          >
-            <Text style={styles.buttonText}>Clear</Text>
           </TouchableOpacity>
         </View>
 
+        {/* Loading */}
         {isLoading && (
           <View style={styles.loadingContainer}>
             <ActivityIndicator size="large" color={colors.currentPrimary} />
-            <Text style={styles.loadingText}>Checking balance...</Text>
+            <Text style={styles.loadingText}>Checking account on XRPL...</Text>
           </View>
         )}
 
-        {error && (
-          <View style={styles.errorContainer}>
-            <Text style={styles.errorText}>❌ {error}</Text>
-          </View>
-        )}
-
+        {/* Results */}
         {accountInfo && !isLoading && (
-          <View>
-            <View style={styles.resultCard}>
-              <Text style={styles.resultTitle}>Account Information</Text>
-              <Text style={styles.addressText}>{accountInfo.address}</Text>
-              
-              {accountInfo.exists ? (
-                <View>
-                  <View style={styles.balanceContainer}>
-                    <Text style={styles.balanceLabel}>Current Balance</Text>
-                    <Text style={styles.balanceValue}>{accountInfo.balance}</Text>
-                    <Text style={styles.balanceUnit}>XRP</Text>
-                  </View>
-
-                  <View style={styles.infoRow}>
-                    <Text style={styles.infoLabel}>Status</Text>
-                    <Text style={[styles.infoValue, { color: colors.currentSecondary }]}>
-                      ✅ Active
-                    </Text>
-                  </View>
-
-                  <View style={styles.infoRow}>
-                    <Text style={styles.infoLabel}>Sequence</Text>
-                    <Text style={styles.infoValue}>{accountInfo.sequence}</Text>
-                  </View>
-
-                  <View style={styles.infoRow}>
-                    <Text style={styles.infoLabel}>Reserve</Text>
-                    <Text style={styles.infoValue}>{accountInfo.reserve} XRP</Text>
-                  </View>
-
-                  <View style={styles.infoRow}>
-                    <Text style={styles.infoLabel}>Available</Text>
-                    <Text style={styles.infoValue}>
-                      {Math.max(0, parseFloat(accountInfo.balance) - parseFloat(accountInfo.reserve)).toFixed(6)} XRP
-                    </Text>
-                  </View>
-                </View>
-              ) : (
-                <View>
-                  <View style={styles.statusContainer}>
-                    <Text style={styles.statusText}>⏳ Account Not Funded</Text>
-                  </View>
-                  
-                  <View style={styles.infoRow}>
-                    <Text style={styles.infoLabel}>Status</Text>
-                    <Text style={[styles.infoValue, { color: colors.currentHighlight }]}>
-                      Not Active
-                    </Text>
-                  </View>
-
-                  <View style={styles.infoRow}>
-                    <Text style={styles.infoLabel}>Required to Activate</Text>
-                    <Text style={styles.infoValue}>{accountInfo.reserve} XRP</Text>
-                  </View>
-
-                  <Text style={[commonStyles.textSecondary, { 
-                    color: colors.currentTextSecondary, 
-                    textAlign: 'center',
-                    marginTop: 15,
-                    lineHeight: 20,
-                  }]}>
-                    This account needs to receive at least {accountInfo.reserve} XRP to be activated on the XRPL network.
-                  </Text>
-                </View>
-              )}
+          <View style={styles.resultCard}>
+            <View style={styles.sectionTitleContainer}>
+              <XRPLogo size={20} color={colors.currentPrimary} />
+              <Text style={styles.sectionTitle}>Account Information</Text>
             </View>
+            
+            <Text style={styles.addressText}>{accountInfo.address}</Text>
+            
+            {accountInfo.exists ? (
+              <View>
+                <Text style={[styles.statusText, styles.existsText]}>
+                  ✅ Account Active
+                </Text>
+                <Text style={styles.balanceText}>
+                  {accountInfo.balance} XRP
+                </Text>
+                <Text style={styles.resultText}>
+                  Sequence Number: {accountInfo.sequence}
+                </Text>
+                <Text style={styles.resultText}>
+                  Reserve Requirement: {accountInfo.reserve} XRP
+                </Text>
+              </View>
+            ) : (
+              <View>
+                <Text style={[styles.statusText, styles.notExistsText]}>
+                  ⏳ Account Not Funded
+                </Text>
+                <Text style={styles.resultText}>
+                  This account has not been activated yet. Send at least {accountInfo.reserve} XRP to activate it.
+                </Text>
+              </View>
+            )}
+
+            <TouchableOpacity
+              style={styles.clearButton}
+              onPress={clearResults}
+            >
+              <Text style={styles.clearButtonText}>Check Another Address</Text>
+            </TouchableOpacity>
           </View>
         )}
 
-        {/* QR Scanner Modal */}
+        {/* QR Scanner */}
         <QRScanner
           visible={showQRScanner}
           onClose={() => setShowQRScanner(false)}

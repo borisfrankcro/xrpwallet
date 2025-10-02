@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Stack } from "expo-router";
 import { ScrollView, Pressable, StyleSheet, View, Text, Platform, TouchableOpacity } from "react-native";
@@ -10,6 +11,7 @@ import WalletCreator from "@/components/WalletCreator";
 import BalanceChecker from "@/components/BalanceChecker";
 import QRScanner from "@/components/QRScanner";
 import OnboardingModal from "@/components/OnboardingModal";
+import XRPPriceDisplay from "@/components/XRPPriceDisplay";
 
 export default function HomeScreen() {
   const theme = useTheme();
@@ -75,57 +77,62 @@ export default function HomeScreen() {
           </View>
         )}
         
-        {/* Tab Navigation */}
-        <View style={[styles.tabContainer, { backgroundColor: colors.currentCard }]}>
-          <TouchableOpacity
-            style={[
-              styles.tab,
-              activeTab === 'create' && { backgroundColor: colors.currentPrimary }
-            ]}
-            onPress={() => setActiveTab('create')}
-          >
-            <IconSymbol 
-              name="plus.circle.fill" 
-              size={20} 
-              color={activeTab === 'create' ? colors.currentCard : colors.currentText} 
-            />
-            <Text style={[
-              styles.tabText,
-              { color: activeTab === 'create' ? colors.currentCard : colors.currentText }
-            ]}>
-              Create Wallet
-            </Text>
-          </TouchableOpacity>
+        <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
+          {/* XRP Price Display */}
+          <XRPPriceDisplay />
           
-          <TouchableOpacity
-            style={[
-              styles.tab,
-              activeTab === 'balance' && { backgroundColor: colors.currentPrimary }
-            ]}
-            onPress={() => setActiveTab('balance')}
-          >
-            <IconSymbol 
-              name="magnifyingglass.circle.fill" 
-              size={20} 
-              color={activeTab === 'balance' ? colors.currentCard : colors.currentText} 
-            />
-            <Text style={[
-              styles.tabText,
-              { color: activeTab === 'balance' ? colors.currentCard : colors.currentText }
-            ]}>
-              Check Balance
-            </Text>
-          </TouchableOpacity>
-        </View>
+          {/* Tab Navigation */}
+          <View style={[styles.tabContainer, { backgroundColor: colors.currentCard }]}>
+            <TouchableOpacity
+              style={[
+                styles.tab,
+                activeTab === 'create' && { backgroundColor: colors.currentPrimary }
+              ]}
+              onPress={() => setActiveTab('create')}
+            >
+              <IconSymbol 
+                name="plus.circle.fill" 
+                size={20} 
+                color={activeTab === 'create' ? colors.currentCard : colors.currentText} 
+              />
+              <Text style={[
+                styles.tabText,
+                { color: activeTab === 'create' ? colors.currentCard : colors.currentText }
+              ]}>
+                Create Wallet
+              </Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity
+              style={[
+                styles.tab,
+                activeTab === 'balance' && { backgroundColor: colors.currentPrimary }
+              ]}
+              onPress={() => setActiveTab('balance')}
+            >
+              <IconSymbol 
+                name="magnifyingglass.circle.fill" 
+                size={20} 
+                color={activeTab === 'balance' ? colors.currentCard : colors.currentText} 
+              />
+              <Text style={[
+                styles.tabText,
+                { color: activeTab === 'balance' ? colors.currentCard : colors.currentText }
+              ]}>
+                Check Balance
+              </Text>
+            </TouchableOpacity>
+          </View>
 
-        {/* Content */}
-        <View style={styles.content}>
-          {activeTab === 'create' ? (
-            <WalletCreator />
-          ) : (
-            <BalanceChecker />
-          )}
-        </View>
+          {/* Content */}
+          <View style={styles.content}>
+            {activeTab === 'create' ? (
+              <WalletCreator />
+            ) : (
+              <BalanceChecker />
+            )}
+          </View>
+        </ScrollView>
 
         {/* QR Scanner Modal */}
         <QRScanner
@@ -146,6 +153,9 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+  },
+  scrollContainer: {
     flex: 1,
   },
   header: {
