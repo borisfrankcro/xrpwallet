@@ -9,7 +9,7 @@ import { useAppTheme } from "@/contexts/ThemeContext";
 import { commonStyles } from "@/styles/commonStyles";
 import WalletCreator from "@/components/WalletCreator";
 import BalanceChecker from "@/components/BalanceChecker";
-import QRScanner from "@/components/QRScanner";
+
 import OnboardingModal from "@/components/OnboardingModal";
 import XRPPriceDisplay from "@/components/XRPPriceDisplay";
 import XRPLogo from "@/components/XRPLogo";
@@ -18,18 +18,7 @@ export default function HomeScreen() {
   const theme = useTheme();
   const { colors, isDark, toggleTheme } = useAppTheme();
   const [activeTab, setActiveTab] = useState<'create' | 'balance'>('create');
-  const [showQRScanner, setShowQRScanner] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(true);
-
-  const handleQRScan = (data: string) => {
-    console.log('QR scanned:', data);
-    // If we're on the balance tab, set the scanned address
-    if (activeTab === 'balance') {
-      // This would need to be passed to BalanceChecker component
-      // For now, we'll just show an alert
-      alert(`Scanned address: ${data}`);
-    }
-  };
 
   const renderHeaderRight = () => (
     <Pressable
@@ -155,13 +144,6 @@ export default function HomeScreen() {
             )}
           </View>
         </ScrollView>
-
-        {/* QR Scanner Modal */}
-        <QRScanner
-          visible={showQRScanner}
-          onClose={() => setShowQRScanner(false)}
-          onScan={handleQRScan}
-        />
 
         {/* Onboarding Modal */}
         <OnboardingModal

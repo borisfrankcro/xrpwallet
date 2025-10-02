@@ -17,8 +17,7 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.bokizg.xrpwallet",
       "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false,
-        "NSCameraUsageDescription": "This app uses the camera to scan QR codes for XRP addresses."
+        "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
@@ -27,10 +26,8 @@
         "backgroundColor": "#6200EE"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.xrpwallet.app",
-      "permissions": [
-        "android.permission.CAMERA"
-      ]
+      "package": "com.XRPWALLET.app",
+      "permissions": []
     },
     "web": {
       "favicon": "./assets/images/final_quest_240x240.png",
@@ -47,9 +44,7 @@
     "plugins": [
       "expo-font",
       "expo-router",
-      "expo-web-browser",
-      "expo-camera",
-      "expo-barcode-scanner"
+      "expo-web-browser"
     ],
     "scheme": "xrp-wallet",
     "experiments": {

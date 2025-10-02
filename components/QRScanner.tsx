@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -8,11 +8,13 @@ import {
   Modal,
   Alert,
   Platform,
+  TextInput,
+  ScrollView,
 } from 'react-native';
-import { BarCodeScanner } from 'expo-barcode-scanner';
 import { IconSymbol } from '@/components/IconSymbol';
 import { useAppTheme } from '@/contexts/ThemeContext';
 import { commonStyles } from '@/styles/commonStyles';
+import XRPLogo from '@/components/XRPLogo';
 
 interface QRScannerProps {
   visible: boolean;
@@ -22,30 +24,28 @@ interface QRScannerProps {
 
 export default function QRScanner({ visible, onClose, onScan }: QRScannerProps) {
   const { colors } = useAppTheme();
-  const [hasPermission, setHasPermission] = useState<boolean | null>(null);
-  const [scanned, setScanned] = useState(false);
+  const [manualInput, setManualInput] = useState('');
 
-  useEffect(() => {
-    const getBarCodeScannerPermissions = async () => {
-      const { status } = await BarCodeScanner.requestPermissionsAsync();
-      setHasPermission(status === 'granted');
-    };
-
-    if (visible) {
-      getBarCodeScannerPermissions();
+  const handleManualInput = () => {
+    if (manualInput.trim()) {
+      console.log('Manual XRP address entered:', manualInput.trim());
+      onScan(manualInput.trim());
+      setManualInput('');
+      onClose();
+    } else {
+      Alert.alert('Error', 'Please enter a valid XRP address');
     }
-  }, [visible]);
-
-  const handleBarCodeScanned = ({ type, data }: { type: string; data: string }) => {
-    setScanned(true);
-    console.log('QR Code scanned:', data);
-    onScan(data);
-    onClose();
   };
 
-  const resetScanner = () => {
-    setScanned(false);
+  const handleSampleAddress = (address: string) => {
+    setManualInput(address);
   };
+
+  const sampleAddresses = [
+    'rN7n7otQDd6FczFgLdSqtcsAUxDkw6fzRH',
+    'rLNaPoKeeBjZe2qs6x52yVPZpZ8td4dc6w',
+    'rDNvpKTVWsizkQyWNm4jLSt4hk2hJ2gEoD'
+  ];
 
   const styles = StyleSheet.create({
     modalContainer: {
@@ -126,122 +126,128 @@ export default function QRScanner({ visible, onClose, onScan }: QRScannerProps) 
       fontSize: 16,
       fontWeight: '600',
     },
-    webNotSupported: {
+    inputContainer: {
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: colors.currentBackground,
       padding: 20,
     },
-    webText: {
+    inputText: {
       fontSize: 16,
       color: colors.currentText,
       textAlign: 'center',
       lineHeight: 24,
+      marginBottom: 30,
+    },
+    textInput: {
+      backgroundColor: colors.currentCard,
+      borderRadius: 12,
+      padding: 15,
+      fontSize: 16,
+      color: colors.currentText,
+      width: '100%',
+      marginBottom: 20,
+      borderWidth: 1,
+      borderColor: colors.currentBorder,
+    },
+    submitButton: {
+      backgroundColor: colors.currentPrimary,
+      ...commonStyles.button,
+      width: '100%',
+    },
+    submitButtonText: {
+      color: colors.currentCard,
+      fontSize: 16,
+      fontWeight: '600',
+    },
+    sampleContainer: {
+      marginTop: 20,
+      width: '100%',
+    },
+    sampleTitle: {
+      fontSize: 14,
+      color: colors.currentText,
+      marginBottom: 10,
+      textAlign: 'center',
+      fontWeight: '600',
+    },
+    sampleButton: {
+      backgroundColor: colors.currentCard,
+      borderRadius: 8,
+      padding: 12,
+      marginVertical: 4,
+      borderWidth: 1,
+      borderColor: colors.currentBorder,
+    },
+    sampleButtonText: {
+      color: colors.currentText,
+      fontSize: 12,
+      fontFamily: 'monospace',
+      textAlign: 'center',
+    },
+    divider: {
+      height: 1,
+      backgroundColor: colors.currentBorder,
+      marginVertical: 20,
+      width: '100%',
     },
   });
-
-  if (Platform.OS === 'web') {
-    return (
-      <Modal visible={visible} animationType="slide">
-        <View style={styles.modalContainer}>
-          <View style={styles.header}>
-            <Text style={styles.headerTitle}>QR Scanner</Text>
-            <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-              <IconSymbol name="xmark" size={24} color={colors.currentText} />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.webNotSupported}>
-            <IconSymbol name="camera.fill" size={64} color={colors.currentTextSecondary} />
-            <Text style={styles.webText}>
-              QR code scanning is not supported on web.{'\n\n'}
-              Please manually enter the XRP address or use the mobile app for QR scanning.
-            </Text>
-          </View>
-        </View>
-      </Modal>
-    );
-  }
-
-  if (hasPermission === null) {
-    return (
-      <Modal visible={visible} animationType="slide">
-        <View style={styles.modalContainer}>
-          <View style={styles.header}>
-            <Text style={styles.headerTitle}>QR Scanner</Text>
-            <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-              <IconSymbol name="xmark" size={24} color={colors.currentText} />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.permissionContainer}>
-            <Text style={styles.permissionText}>Requesting camera permission...</Text>
-          </View>
-        </View>
-      </Modal>
-    );
-  }
-
-  if (hasPermission === false) {
-    return (
-      <Modal visible={visible} animationType="slide">
-        <View style={styles.modalContainer}>
-          <View style={styles.header}>
-            <Text style={styles.headerTitle}>QR Scanner</Text>
-            <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-              <IconSymbol name="xmark" size={24} color={colors.currentText} />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.permissionContainer}>
-            <IconSymbol name="camera.fill" size={64} color={colors.currentTextSecondary} />
-            <Text style={styles.permissionText}>
-              Camera permission is required to scan QR codes.{'\n\n'}
-              Please grant camera access in your device settings.
-            </Text>
-            <TouchableOpacity
-              style={styles.permissionButton}
-              onPress={() => BarCodeScanner.requestPermissionsAsync()}
-            >
-              <Text style={styles.permissionButtonText}>Grant Permission</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
-    );
-  }
 
   return (
     <Modal visible={visible} animationType="slide">
       <View style={styles.modalContainer}>
         <View style={styles.header}>
-          <Text style={styles.headerTitle}>Scan QR Code</Text>
+          <Text style={styles.headerTitle}>Enter XRP Address</Text>
           <TouchableOpacity style={styles.closeButton} onPress={onClose}>
             <IconSymbol name="xmark" size={24} color={colors.currentText} />
           </TouchableOpacity>
         </View>
         
-        <BarCodeScanner
-          onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-          style={styles.scanner}
-        />
-        
-        <View style={styles.overlay}>
-          <View style={styles.scanArea} />
-        </View>
-        
-        <View style={styles.instructions}>
-          <Text style={styles.instructionText}>
-            Position the QR code within the frame to scan an XRP address
-          </Text>
-        </View>
-        
-        {scanned && (
-          <TouchableOpacity
-            style={[styles.permissionButton, { position: 'absolute', bottom: 50, alignSelf: 'center' }]}
-            onPress={resetScanner}
-          >
-            <Text style={styles.permissionButtonText}>Scan Again</Text>
-          </TouchableOpacity>
-        )}
+        <ScrollView style={{ flex: 1 }}>
+          <View style={styles.inputContainer}>
+            <XRPLogo size={64} color={colors.currentPrimary} variant="gradient" />
+            <Text style={styles.inputText}>
+              QR code scanning is temporarily unavailable.{'\n\n'}
+              Please manually enter the XRP address below:
+            </Text>
+            
+            <TextInput
+              style={styles.textInput}
+              placeholder="Enter XRP address (e.g., rN7n7otQDd6FczFgLdSqtcsAUxDkw6fzRH)"
+              placeholderTextColor={colors.currentTextSecondary}
+              value={manualInput}
+              onChangeText={setManualInput}
+              autoCapitalize="none"
+              autoCorrect={false}
+              multiline={false}
+            />
+            
+            <TouchableOpacity
+              style={styles.submitButton}
+              onPress={handleManualInput}
+            >
+              <Text style={styles.submitButtonText}>Check Balance</Text>
+            </TouchableOpacity>
+
+            <View style={styles.divider} />
+
+            <View style={styles.sampleContainer}>
+              <Text style={styles.sampleTitle}>
+                Or try these sample addresses:
+              </Text>
+              {sampleAddresses.map((address, index) => (
+                <TouchableOpacity
+                  key={index}
+                  style={styles.sampleButton}
+                  onPress={() => handleSampleAddress(address)}
+                >
+                  <Text style={styles.sampleButtonText}>{address}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+        </ScrollView>
       </View>
     </Modal>
   );
