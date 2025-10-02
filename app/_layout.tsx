@@ -1,3 +1,4 @@
+
 import "react-native-reanimated";
 import React, { useEffect } from "react";
 import { useFonts } from "expo-font";
@@ -11,7 +12,7 @@ import {
   DarkTheme,
   DefaultTheme,
   Theme,
-  ThemeProvider,
+  ThemeProvider as NavigationThemeProvider,
 } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import { Button } from "@/components/button";
@@ -84,7 +85,7 @@ export default function RootLayout() {
       <StatusBar style="auto" animated />
       <ErrorBoundary>
         <ThemeProvider>
-          <ThemeProvider
+          <NavigationThemeProvider
             value={colorScheme === "dark" ? CustomDarkTheme : CustomDefaultTheme}
           >
             <WidgetProvider>
@@ -122,7 +123,7 @@ export default function RootLayout() {
               <SystemBars style={"auto"} />
               </GestureHandlerRootView>
             </WidgetProvider>
-          </ThemeProvider>
+          </NavigationThemeProvider>
         </ThemeProvider>
       </ErrorBoundary>
     </>
