@@ -87,94 +87,125 @@ export default function XRPPriceDisplay() {
   const styles = StyleSheet.create({
     container: {
       backgroundColor: colors.currentCard,
-      borderRadius: 12,
-      padding: 16,
+      borderRadius: 16,
+      padding: 20,
       margin: 16,
-      elevation: 3,
+      elevation: 4,
       shadowColor: '#000',
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.1,
-      shadowRadius: 4,
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.15,
+      shadowRadius: 8,
     },
     header: {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-      marginBottom: 12,
+      marginBottom: 16,
     },
     titleContainer: {
       flexDirection: 'row',
       alignItems: 'center',
-      gap: 8,
+      gap: 12,
     },
-    title: {
-      fontSize: 18,
+    logoContainer: {
+      padding: 4,
+    },
+    titleText: {
+      fontSize: 20,
       fontWeight: 'bold',
       color: colors.currentText,
+      letterSpacing: 0.5,
+    },
+    subtitleText: {
+      fontSize: 12,
+      color: colors.currentTextSecondary,
+      opacity: 0.8,
     },
     refreshButton: {
-      padding: 8,
-      borderRadius: 8,
+      padding: 10,
+      borderRadius: 10,
       backgroundColor: colors.currentBackground,
     },
     priceContainer: {
       alignItems: 'center',
-      marginVertical: 8,
+      marginVertical: 12,
+    },
+    priceRow: {
+      flexDirection: 'row',
+      alignItems: 'baseline',
+      gap: 8,
     },
     priceText: {
-      fontSize: 32,
+      fontSize: 36,
       fontWeight: 'bold',
       color: colors.currentText,
       fontFamily: 'monospace',
     },
     currencyText: {
-      fontSize: 16,
+      fontSize: 18,
       color: colors.currentTextSecondary,
-      marginLeft: 4,
+      fontWeight: '600',
     },
     changeContainer: {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
-      marginTop: 4,
+      marginTop: 8,
+      paddingHorizontal: 12,
+      paddingVertical: 6,
+      borderRadius: 20,
+      backgroundColor: colors.currentBackground,
     },
     changeText: {
       fontSize: 16,
-      fontWeight: '600',
-      marginLeft: 4,
+      fontWeight: '700',
+      marginLeft: 6,
     },
-    lastUpdated: {
+    changeLabel: {
       fontSize: 12,
       color: colors.currentTextSecondary,
+      marginLeft: 6,
+      opacity: 0.8,
+    },
+    lastUpdated: {
+      fontSize: 11,
+      color: colors.currentTextSecondary,
       textAlign: 'center',
-      marginTop: 8,
+      marginTop: 12,
+      opacity: 0.7,
     },
     loadingContainer: {
       alignItems: 'center',
-      paddingVertical: 20,
+      paddingVertical: 24,
     },
     loadingText: {
       color: colors.currentTextSecondary,
-      marginTop: 8,
+      marginTop: 12,
+      fontSize: 14,
     },
     errorContainer: {
       alignItems: 'center',
-      paddingVertical: 20,
+      paddingVertical: 24,
     },
     errorText: {
       color: colors.currentHighlight,
       textAlign: 'center',
-      marginBottom: 12,
+      marginBottom: 16,
+      fontSize: 14,
     },
     retryButton: {
       backgroundColor: colors.currentPrimary,
-      paddingHorizontal: 16,
-      paddingVertical: 8,
-      borderRadius: 8,
+      paddingHorizontal: 20,
+      paddingVertical: 10,
+      borderRadius: 10,
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 8,
     },
     retryButtonText: {
       color: colors.currentCard,
       fontWeight: '600',
+      fontSize: 14,
     },
   });
 
@@ -183,13 +214,19 @@ export default function XRPPriceDisplay() {
       <View style={styles.container}>
         <View style={styles.header}>
           <View style={styles.titleContainer}>
-            <XRPLogo size={24} color={colors.currentText} />
-            <Text style={styles.title}>XRP Price</Text>
+            <View style={styles.logoContainer}>
+              <XRPLogo size={32} color={colors.currentPrimary} variant="gradient" />
+            </View>
+            <View>
+              <Text style={styles.titleText}>XRP Price</Text>
+              <Text style={styles.subtitleText}>Live Market Data</Text>
+            </View>
           </View>
         </View>
         <View style={styles.errorContainer}>
           <Text style={styles.errorText}>{error}</Text>
           <TouchableOpacity style={styles.retryButton} onPress={fetchXRPPrice}>
+            <XRPLogo size={16} color={colors.currentCard} />
             <Text style={styles.retryButtonText}>Retry</Text>
           </TouchableOpacity>
         </View>
@@ -201,8 +238,13 @@ export default function XRPPriceDisplay() {
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.titleContainer}>
-          <XRPLogo size={24} color={colors.currentText} />
-          <Text style={styles.title}>XRP Price</Text>
+          <View style={styles.logoContainer}>
+            <XRPLogo size={32} color={colors.currentPrimary} variant="gradient" />
+          </View>
+          <View>
+            <Text style={styles.titleText}>XRP Price</Text>
+            <Text style={styles.subtitleText}>Live Market Data</Text>
+          </View>
         </View>
         <TouchableOpacity
           style={styles.refreshButton}
@@ -212,7 +254,7 @@ export default function XRPPriceDisplay() {
           {isLoading ? (
             <ActivityIndicator size="small" color={colors.currentPrimary} />
           ) : (
-            <IconSymbol name="arrow.clockwise" size={20} color={colors.currentText} />
+            <IconSymbol name="arrow.clockwise" size={22} color={colors.currentText} />
           )}
         </TouchableOpacity>
       </View>
@@ -225,7 +267,7 @@ export default function XRPPriceDisplay() {
       ) : priceData ? (
         <>
           <View style={styles.priceContainer}>
-            <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
+            <View style={styles.priceRow}>
               <Text style={styles.priceText}>${formatPrice(priceData.price)}</Text>
               <Text style={styles.currencyText}>USD</Text>
             </View>
@@ -234,13 +276,13 @@ export default function XRPPriceDisplay() {
           <View style={styles.changeContainer}>
             <IconSymbol
               name={priceData.change24h >= 0 ? "arrow.up.right" : "arrow.down.right"}
-              size={16}
+              size={18}
               color={getChangeColor(priceData.change24h)}
             />
             <Text style={[styles.changeText, { color: getChangeColor(priceData.change24h) }]}>
               {formatChange(priceData.change24h)}
             </Text>
-            <Text style={[styles.currencyText, { marginLeft: 4 }]}>24h</Text>
+            <Text style={styles.changeLabel}>24h</Text>
           </View>
 
           <Text style={styles.lastUpdated}>

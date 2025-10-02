@@ -12,6 +12,7 @@ import BalanceChecker from "@/components/BalanceChecker";
 import QRScanner from "@/components/QRScanner";
 import OnboardingModal from "@/components/OnboardingModal";
 import XRPPriceDisplay from "@/components/XRPPriceDisplay";
+import XRPLogo from "@/components/XRPLogo";
 
 export default function HomeScreen() {
   const theme = useTheme();
@@ -45,12 +46,17 @@ export default function HomeScreen() {
 
   const renderHeaderLeft = () => (
     <View style={styles.brandContainer}>
-      <Text style={[styles.brandText, { color: colors.currentText }]}>
-        XRP WALLET
-      </Text>
-      <Text style={[styles.brandSubtext, { color: colors.currentTextSecondary }]}>
-        made by Boki zg
-      </Text>
+      <View style={styles.brandHeader}>
+        <XRPLogo size={32} color={colors.currentPrimary} variant="gradient" />
+        <View style={styles.brandTextContainer}>
+          <Text style={[styles.brandText, { color: colors.currentText }]}>
+            XRP WALLET
+          </Text>
+          <Text style={[styles.brandSubtext, { color: colors.currentTextSecondary }]}>
+            made by Boki zg
+          </Text>
+        </View>
+      </View>
     </View>
   );
 
@@ -78,6 +84,22 @@ export default function HomeScreen() {
         )}
         
         <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
+          {/* Hero Section with XRP Branding */}
+          <View style={[styles.heroSection, { backgroundColor: colors.currentCard }]}>
+            <View style={styles.heroContent}>
+              <XRPLogo size={80} color={colors.currentPrimary} variant="gradient" />
+              <Text style={[styles.heroTitle, { color: colors.currentText }]}>
+                XRP WALLET
+              </Text>
+              <Text style={[styles.heroSubtitle, { color: colors.currentTextSecondary }]}>
+                Secure • Professional • Easy to Use
+              </Text>
+              <Text style={[styles.heroDescription, { color: colors.currentTextSecondary }]}>
+                Create and manage XRP wallets on the XRPL network with confidence
+              </Text>
+            </View>
+          </View>
+
           {/* XRP Price Display */}
           <XRPPriceDisplay />
           
@@ -90,10 +112,10 @@ export default function HomeScreen() {
               ]}
               onPress={() => setActiveTab('create')}
             >
-              <IconSymbol 
-                name="plus.circle.fill" 
+              <XRPLogo 
                 size={20} 
-                color={activeTab === 'create' ? colors.currentCard : colors.currentText} 
+                color={activeTab === 'create' ? colors.currentCard : colors.currentPrimary} 
+                variant="outline"
               />
               <Text style={[
                 styles.tabText,
@@ -169,16 +191,61 @@ const styles = StyleSheet.create({
   brandContainer: {
     flex: 1,
   },
+  brandHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  brandTextContainer: {
+    flex: 1,
+  },
   brandText: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'bold',
+    letterSpacing: 0.5,
   },
   brandSubtext: {
-    fontSize: 12,
+    fontSize: 11,
     fontStyle: 'italic',
+    opacity: 0.8,
   },
   headerButtonContainer: {
     padding: 8,
+  },
+  heroSection: {
+    margin: 16,
+    borderRadius: 16,
+    padding: 24,
+    alignItems: 'center',
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+  },
+  heroContent: {
+    alignItems: 'center',
+    gap: 8,
+  },
+  heroTitle: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    letterSpacing: 1,
+    marginTop: 12,
+  },
+  heroSubtitle: {
+    fontSize: 14,
+    fontWeight: '600',
+    textAlign: 'center',
+    opacity: 0.9,
+  },
+  heroDescription: {
+    fontSize: 13,
+    textAlign: 'center',
+    lineHeight: 18,
+    marginTop: 4,
+    opacity: 0.7,
+    maxWidth: 280,
   },
   tabContainer: {
     flexDirection: 'row',

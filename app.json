@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "XRP Wallet",
-    "slug": "XRP Wallet",
+    "name": "xrpwallet",
+    "slug": "xrpwallet",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/natively-dark.png",
@@ -27,7 +27,7 @@
         "backgroundColor": "#6200EE"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.bokizg.xrpwallet",
+      "package": "com.xrpwallet.app",
       "permissions": [
         "android.permission.CAMERA"
       ]
